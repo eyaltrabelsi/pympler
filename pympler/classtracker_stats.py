@@ -600,8 +600,8 @@ class HtmlStats(Stats):
                         data = snapshot.classes[classname].copy()
                         path = self.relative_path(self.links[classname])
                         data['cls'] = '<a href="%s">%s</a>' % (path, classname)
-                        data['sum'] = pp(data['sum'])
-                        data['avg'] = pp(data['avg'])
+                        data['sum'] = pp(float(data['sum']))
+                        data['avg'] = pp(float(data['avg']))
                         fobj.write(self.snapshot_cls % data)
             fobj.write('</table>')
             fobj.write('</td><td>\n')
@@ -644,7 +644,8 @@ class HtmlStats(Stats):
 
         return self.chart_tag % (os.path.basename(filename))
 
-    def poly_between(self, x, ylower, yupper):
+    def poly_between(self, x: List, ylower: List,
+                     yupper: List) -> Tuple[Iterable, Iterable]:
         """
         This function was removed from matplotlib - here we use a simplified
         version:
@@ -662,10 +663,10 @@ class HtmlStats(Stats):
 
         Nx = len(x)
         if not numpy.iterable(ylower):
-            ylower = ylower*numpy.ones(Nx)
+            ylower = ylower * numpy.ones(Nx)
 
         if not numpy.iterable(yupper):
-            yupper = yupper*numpy.ones(Nx)
+            yupper = yupper * numpy.ones(Nx)
 
         x = numpy.concatenate((x, x[::-1]))
         y = numpy.concatenate((yupper, ylower[::-1]))
